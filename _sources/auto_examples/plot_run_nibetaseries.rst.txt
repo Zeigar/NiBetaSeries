@@ -1,0 +1,1146 @@
+.. note::
+    :class: sphx-glr-download-link-note
+
+    Click :ref:`here <sphx_glr_download_auto_examples_plot_run_nibetaseries.py>` to download the full example code
+.. rst-class:: sphx-glr-example-title
+
+.. _sphx_glr_auto_examples_plot_run_nibetaseries.py:
+
+
+Running NiBetaSeries using ds000164 (Stroop Task)
+===============================================================
+
+This example runs through a basic call of NiBetaSeries using
+the commandline entry point ``nibs``.
+While this example is using python, typically `nibs` will be
+called directly on the commandline.
+
+To run this locally, you also need ``awscli`` installed via
+``pip install awscli``
+
+
+Import all the necessary packages
+=================================
+
+
+
+.. code-block:: python
+
+
+    import tempfile  # make a temporary directory for files
+    import os  # interact with the filesystem
+    from subprocess import call, Popen, PIPE, STDOUT  # enable calling commandline
+
+    import matplotlib.pyplot as plt  # manipulate figures
+    import seaborn as sns  # display results
+    import pandas as pd   # manipulate tabular data
+    from datalad.api import install  # use datalad for file retrieval
+
+
+
+
+
+
+
+Download relevant data from ds000164
+====================================
+
+
+
+.. code-block:: python
+
+
+    data_dir = tempfile.mkdtemp()
+    print('Our working directory: {}'.format(data_dir))
+
+    # here on openneuro: https://openneuro.org/datasets/ds000164/versions/00001
+    # I'm using openfmri since I'm getting an error with openneuro
+    dataset = install(data_dir, "///openfmri/ds000164")
+
+    # selecting subject that has fmriprep
+    bids_data = os.path.join("sub-001", "func")
+    dataset.get(bids_data)
+    events_file = os.path.join(dataset.path, bids_data,
+                               "sub-001_task-stroop_events.tsv")
+    print("the events file: {}".format(events_file))
+
+
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+ Out:
+
+ .. code-block:: none
+
+    Our working directory: /tmp/tmpbsedhkp2
+    the events file: /tmp/tmpbsedhkp2/sub-001/func/sub-001_task-stroop_events.tsv
+
+
+Manipulate events file so it satifies assumptions
+=================================================
+1. the correct column has 1's and 0's corresponding to correct and incorrect,
+respectively.
+2. the condition column is renamed to trial_type
+
+
+read the file
+-------------
+
+
+
+.. code-block:: python
+
+    events_df = pd.read_csv(events_file, sep='\t', na_values="n/a")
+    events_df.head()
+
+
+
+
+
+
+
+change the Y/N to 1/0
+---------------------
+
+
+
+.. code-block:: python
+
+    events_df['correct'].replace({"Y": 1, "N": 0}, inplace=True)
+    events_df.head()
+
+
+
+
+
+
+
+replace condition with trial_type
+---------------------------------
+
+
+
+.. code-block:: python
+
+    events_df.rename({"condition": "trial_type"}, axis='columns', inplace=True)
+    events_df.head()
+
+
+
+
+
+
+
+save the file
+-------------
+files tracked by git-annex need to be unlocked
+
+
+
+.. code-block:: python
+
+    dataset.unlock(events_file)
+    # save the updated event file
+    events_df.to_csv(events_file, sep="\t", na_rep="n/a", index=False)
+    # git-annex the file
+    dataset.save(events_file)
+
+
+
+
+
+
+
+Download the fmriprep results
+=============================
+
+
+
+.. code-block:: python
+
+
+    fmriprep_res = """s3://openneuro.outputs/\
+    921294bd5b869b1852ab3ce886583795/4dd151e3-52d1-4fa2-9591-27c16520331c"""
+
+    # datalad command currently not working
+    # dataset.download_url(fmriprep_res)
+    # depends on user having awscli installed: https://pypi.org/project/awscli/
+    call([
+          'aws',
+          '--no-sign-request',
+          's3',
+          'sync',
+          fmriprep_res,
+          os.path.join(data_dir, 'derivatives')
+         ])
+
+    # path to the downloaded results
+    fmriprep_path = os.path.join(dataset.path, "derivatives", "fmriprep", "sub-001", "func")
+    # display the files
+    os.listdir(fmriprep_path)
+
+
+
+
+
+
+
+Download a parcelation atlas and region order file
+==================================================
+
+
+
+.. code-block:: python
+
+
+    # Download the schaefer atlas: https://www.ncbi.nlm.nih.gov/pubmed/28981612
+    schaefer_base_url = """https://github.com/ThomasYeoLab/CBIG/raw/master/stable_projects/\
+    brain_parcellation/Schaefer2018_LocalGlobal/Parcellations/MNI/"""
+    schaefer_mni = "Schaefer2018_100Parcels_7Networks_order_FSLMNI152_2mm.nii.gz"
+    schaefer_txt = "Schaefer2018_100Parcels_7Networks_order.txt"
+    schaefer_mni_url = schaefer_base_url + schaefer_mni
+    schaefer_txt_url = schaefer_base_url + schaefer_txt
+    download_dir = os.path.join(dataset.path, "derivatives", "data")
+    os.makedirs(download_dir, exist_ok=True)
+    dataset.download_url([schaefer_mni_url, schaefer_txt_url],
+                         path=download_dir,
+                         overwrite=True)
+    # specify the nifti file
+    atlas_mni_file = os.path.join(download_dir, schaefer_mni)
+
+
+
+
+
+
+
+Manipulate the region order file
+================================
+
+
+read the atlas file
+-------------------
+
+
+
+.. code-block:: python
+
+
+    atlas_txt = os.path.join(download_dir, schaefer_txt)
+    atlas_df = pd.read_csv(atlas_txt, sep="\t", header=None)
+    atlas_df.head()
+
+
+
+
+
+
+
+drop coordinate columns
+-----------------------
+
+
+
+.. code-block:: python
+
+
+    atlas_df.drop([2, 3, 4, 5], axis='columns', inplace=True)
+    atlas_df.head()
+
+
+
+
+
+
+
+rename columns with the approved headings: "index" and "regions"
+----------------------------------------------------------------
+
+
+
+.. code-block:: python
+
+
+    atlas_df.rename({0: 'index', 1: 'regions'}, axis='columns', inplace=True)
+    atlas_df.head()
+
+
+
+
+
+
+
+remove prefix "7Networks"
+-------------------------
+
+
+
+.. code-block:: python
+
+
+    atlas_df.replace(regex={'7Networks_(.*)': '\\1'}, inplace=True)
+    atlas_df.head()
+
+
+
+
+
+
+
+write out the file
+------------------
+
+
+
+.. code-block:: python
+
+
+    atlas_tsv = atlas_txt.replace(".txt", ".tsv")
+    atlas_df.to_csv(atlas_tsv, sep="\t", index=False)
+
+
+
+
+
+
+
+Run nibs
+========
+
+
+
+.. code-block:: python
+
+    out_dir = os.path.join(dataset.path, "derivatives")
+    cmd = """\
+    nibs -c WhiteMatter CSF \
+    --participant_label 001 \
+    -a {atlas_mni_file} \
+    -l {atlas_tsv} \
+    {bids_dir} \
+    fmriprep \
+    {out_dir} \
+    participant
+    """.format(atlas_mni_file=atlas_mni_file,
+               atlas_tsv=atlas_tsv,
+               bids_dir=dataset.path,
+               out_dir=out_dir)
+    # call nibs
+    p = Popen(cmd, shell=True, stdout=PIPE, stderr=STDOUT)
+
+    while True:
+        line = p.stdout.readline()
+        if not line:
+            break
+        print(line)
+
+
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+ Out:
+
+ .. code-block:: none
+
+    b"/home/travis/build/HBClab/NiBetaSeries/.tox/docs/lib/python3.6/site-packages/grabbit/core.py:448: UserWarning: Domain with name 'bids' already exists; returning existing Domain configuration.\n"
+    b'  warnings.warn(msg)\n'
+    b'181213-04:44:32,813 nipype.workflow INFO:\n'
+    b"\t Workflow nibetaseries_participant_wf settings: ['check', 'execution', 'logging', 'monitoring']\n"
+    b'181213-04:44:32,824 nipype.workflow INFO:\n'
+    b'\t Running in parallel.\n'
+    b'181213-04:44:32,826 nipype.workflow INFO:\n'
+    b'\t [MultiProc] Running 0 tasks, and 1 jobs ready. Free memory (GB): 6.57/6.57, Free processors: 2/2.\n'
+    b'181213-04:44:32,884 nipype.workflow INFO:\n'
+    b'\t [Node] Setting-up "nibetaseries_participant_wf.single_subject001_wf.betaseries_wf.betaseries_node" in "/home/travis/build/HBClab/NiBetaSeries/examples/nibetaseries_work/NiBetaSeries_work/nibetaseries_participant_wf/single_subject001_wf/betaseries_wf/e4783d34c8ca1d6bda7a1ffd7272437641e9e7cb/betaseries_node".\n'
+    b'181213-04:44:32,890 nipype.workflow INFO:\n'
+    b'\t [Node] Running "betaseries_node" ("nibetaseries.interfaces.nistats.BetaSeries")\n'
+    b"/home/travis/build/HBClab/NiBetaSeries/.tox/docs/lib/python3.6/importlib/_bootstrap.py:219: ImportWarning: can't resolve package from __spec__ or __package__, falling back on __name__ and __path__\n"
+    b'  return f(*args, **kwds)\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'181213-04:44:34,831 nipype.workflow INFO:\n'
+    b'\t [MultiProc] Running 1 tasks, and 0 jobs ready. Free memory (GB): 6.37/6.57, Free processors: 1/2.\n'
+    b'                     Currently running:\n'
+    b'                       * nibetaseries_participant_wf.single_subject001_wf.betaseries_wf.betaseries_node\n'
+    b"/home/travis/build/HBClab/NiBetaSeries/.tox/docs/lib/python3.6/site-packages/nistats/hemodynamic_models.py:268: DeprecationWarning: object of type <class 'numpy.float64'> cannot be safely interpreted as an integer.\n"
+    b'  frame_times.max() * (1 + 1. / (n - 1)), n_hr)\n'
+    b"/home/travis/build/HBClab/NiBetaSeries/.tox/docs/lib/python3.6/site-packages/nistats/hemodynamic_models.py:55: DeprecationWarning: object of type <class 'float'> cannot be safely interpreted as an integer.\n"
+    b'  time_stamps = np.linspace(0, time_length, float(time_length) / dt)\n'
+    b'\n'
+    b'Computation of 1 runs done in 10 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 10 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'Computing run 1 out of 1 runs (go take a coffee, a big one)\n'
+    b'\n'
+    b'Computation of 1 runs done in 9 seconds\n'
+    b'\n'
+    b'/home/travis/build/HBClab/NiBetaSeries/.tox/docs/lib/python3.6/site-packages/nipype/pipeline/engine/utils.py:307: DeprecationWarning: use "HasTraits.trait_set" instead\n'
+    b'  result.outputs.set(**modify_paths(tosave, relative=True, basedir=cwd))\n'
+    b'181213-05:03:52,750 nipype.workflow INFO:\n'
+    b'\t [Node] Finished "nibetaseries_participant_wf.single_subject001_wf.betaseries_wf.betaseries_node".\n'
+    b'181213-05:03:53,970 nipype.workflow INFO:\n'
+    b'\t [Job 0] Completed (nibetaseries_participant_wf.single_subject001_wf.betaseries_wf.betaseries_node).\n'
+    b'181213-05:03:53,972 nipype.workflow INFO:\n'
+    b'\t [MultiProc] Running 0 tasks, and 1 jobs ready. Free memory (GB): 6.57/6.57, Free processors: 2/2.\n'
+    b'181213-05:03:55,972 nipype.workflow INFO:\n'
+    b'\t [MultiProc] Running 0 tasks, and 3 jobs ready. Free memory (GB): 6.57/6.57, Free processors: 2/2.\n'
+    b'181213-05:03:56,18 nipype.workflow INFO:\n'
+    b'\t [Node] Setting-up "_atlas_corr_node0" in "/home/travis/build/HBClab/NiBetaSeries/examples/nibetaseries_work/NiBetaSeries_work/nibetaseries_participant_wf/single_subject001_wf/correlation_wf/e4783d34c8ca1d6bda7a1ffd7272437641e9e7cb/atlas_corr_node/mapflow/_atlas_corr_node0".\n'
+    b'181213-05:03:56,19 nipype.workflow INFO:\n'
+    b'\t [Node] Setting-up "_atlas_corr_node1" in "/home/travis/build/HBClab/NiBetaSeries/examples/nibetaseries_work/NiBetaSeries_work/nibetaseries_participant_wf/single_subject001_wf/correlation_wf/e4783d34c8ca1d6bda7a1ffd7272437641e9e7cb/atlas_corr_node/mapflow/_atlas_corr_node1".\n'
+    b'181213-05:03:56,22 nipype.workflow INFO:\n'
+    b'\t [Node] Running "_atlas_corr_node1" ("nibetaseries.interfaces.nilearn.AtlasConnectivity")\n'
+    b'181213-05:03:56,22 nipype.workflow INFO:\n'
+    b'\t [Node] Running "_atlas_corr_node0" ("nibetaseries.interfaces.nilearn.AtlasConnectivity")\n'
+    b"/home/travis/build/HBClab/NiBetaSeries/.tox/docs/lib/python3.6/importlib/_bootstrap.py:219: ImportWarning: can't resolve package from __spec__ or __package__, falling back on __name__ and __path__\n"
+    b'  return f(*args, **kwds)\n'
+    b"/home/travis/build/HBClab/NiBetaSeries/.tox/docs/lib/python3.6/importlib/_bootstrap.py:219: ImportWarning: can't resolve package from __spec__ or __package__, falling back on __name__ and __path__\n"
+    b'  return f(*args, **kwds)\n'
+    b"/home/travis/build/HBClab/NiBetaSeries/.tox/docs/lib/python3.6/importlib/_bootstrap.py:219: ImportWarning: can't resolve package from __spec__ or __package__, falling back on __name__ and __path__\n"
+    b'  return f(*args, **kwds)\n'
+    b'[NiftiLabelsMasker.fit_transform] loading data from /tmp/tmpbsedhkp2/derivatives/data/Schaefer2018_100Parcels_7Networks_order_FSLMNI152_2mm.nii.gz\n'
+    b'[NiftiLabelsMasker.fit_transform] loading data from /tmp/tmpbsedhkp2/derivatives/data/Schaefer2018_100Parcels_7Networks_order_FSLMNI152_2mm.nii.gz\n'
+    b'Resampling labels\n'
+    b'[NiftiLabelsMasker.transform_single_imgs] Loading data from /home/travis/build/HBClab/NiBetaSeries/examples/nibetaseries_work/NiBetaSeries_work/nibetaseries_participant_wf/single_subject001_wf/betaseries_wf/e4783d34c8ca1d6bda7a1ffd7272437641e9e7cb/betaseries_n\n'
+    b'Resampling labels\n'
+    b'[NiftiLabelsMasker.transform_single_imgs] Loading data from /home/travis/build/HBClab/NiBetaSeries/examples/nibetaseries_work/NiBetaSeries_work/nibetaseries_participant_wf/single_subject001_wf/betaseries_wf/e4783d34c8ca1d6bda7a1ffd7272437641e9e7cb/betaseries_n\n'
+    b'[NiftiLabelsMasker.transform_single_imgs] Extracting region signals\n'
+    b"/home/travis/build/HBClab/NiBetaSeries/.tox/docs/lib/python3.6/importlib/_bootstrap.py:219: ImportWarning: can't resolve package from __spec__ or __package__, falling back on __name__ and __path__\n"
+    b'  return f(*args, **kwds)\n'
+    b'[NiftiLabelsMasker.transform_single_imgs] Extracting region signals\n'
+    b"/home/travis/build/HBClab/NiBetaSeries/.tox/docs/lib/python3.6/importlib/_bootstrap.py:219: ImportWarning: can't resolve package from __spec__ or __package__, falling back on __name__ and __path__\n"
+    b'  return f(*args, **kwds)\n'
+    b'[NiftiLabelsMasker.transform_single_imgs] Cleaning extracted signals\n'
+    b'181213-05:03:57,975 nipype.workflow INFO:\n'
+    b'\t [MultiProc] Running 2 tasks, and 1 jobs ready. Free memory (GB): 6.17/6.57, Free processors: 0/2.\n'
+    b'                     Currently running:\n'
+    b'                       * _atlas_corr_node1\n'
+    b'                       * _atlas_corr_node0\n'
+    b'/home/travis/build/HBClab/NiBetaSeries/.tox/docs/lib/python3.6/site-packages/nipype/pipeline/engine/utils.py:307: DeprecationWarning: use "HasTraits.trait_set" instead\n'
+    b'  result.outputs.set(**modify_paths(tosave, relative=True, basedir=cwd))\n'
+    b'181213-05:03:58,122 nipype.workflow INFO:\n'
+    b'\t [Node] Finished "_atlas_corr_node1".\n'
+    b'[NiftiLabelsMasker.transform_single_imgs] Cleaning extracted signals\n'
+    b'/home/travis/build/HBClab/NiBetaSeries/.tox/docs/lib/python3.6/site-packages/nipype/pipeline/engine/utils.py:307: DeprecationWarning: use "HasTraits.trait_set" instead\n'
+    b'  result.outputs.set(**modify_paths(tosave, relative=True, basedir=cwd))\n'
+    b'181213-05:03:58,384 nipype.workflow INFO:\n'
+    b'\t [Node] Finished "_atlas_corr_node0".\n'
+    b'181213-05:03:59,976 nipype.workflow INFO:\n'
+    b'\t [Job 4] Completed (_atlas_corr_node0).\n'
+    b'181213-05:03:59,977 nipype.workflow INFO:\n'
+    b'\t [Job 5] Completed (_atlas_corr_node1).\n'
+    b'181213-05:03:59,978 nipype.workflow INFO:\n'
+    b'\t [MultiProc] Running 0 tasks, and 1 jobs ready. Free memory (GB): 6.57/6.57, Free processors: 2/2.\n'
+    b'181213-05:04:00,20 nipype.workflow INFO:\n'
+    b'\t [Node] Setting-up "_atlas_corr_node2" in "/home/travis/build/HBClab/NiBetaSeries/examples/nibetaseries_work/NiBetaSeries_work/nibetaseries_participant_wf/single_subject001_wf/correlation_wf/e4783d34c8ca1d6bda7a1ffd7272437641e9e7cb/atlas_corr_node/mapflow/_atlas_corr_node2".\n'
+    b'181213-05:04:00,22 nipype.workflow INFO:\n'
+    b'\t [Node] Running "_atlas_corr_node2" ("nibetaseries.interfaces.nilearn.AtlasConnectivity")\n'
+    b'[NiftiLabelsMasker.fit_transform] loading data from /tmp/tmpbsedhkp2/derivatives/data/Schaefer2018_100Parcels_7Networks_order_FSLMNI152_2mm.nii.gz\n'
+    b'Resampling labels\n'
+    b'[NiftiLabelsMasker.transform_single_imgs] Loading data from /home/travis/build/HBClab/NiBetaSeries/examples/nibetaseries_work/NiBetaSeries_work/nibetaseries_participant_wf/single_subject001_wf/betaseries_wf/e4783d34c8ca1d6bda7a1ffd7272437641e9e7cb/betaseries_n\n'
+    b'[NiftiLabelsMasker.transform_single_imgs] Extracting region signals\n'
+    b'[NiftiLabelsMasker.transform_single_imgs] Cleaning extracted signals\n'
+    b'/home/travis/build/HBClab/NiBetaSeries/.tox/docs/lib/python3.6/site-packages/nipype/pipeline/engine/utils.py:307: DeprecationWarning: use "HasTraits.trait_set" instead\n'
+    b'  result.outputs.set(**modify_paths(tosave, relative=True, basedir=cwd))\n'
+    b'181213-05:04:01,101 nipype.workflow INFO:\n'
+    b'\t [Node] Finished "_atlas_corr_node2".\n'
+    b'181213-05:04:01,978 nipype.workflow INFO:\n'
+    b'\t [Job 6] Completed (_atlas_corr_node2).\n'
+    b'181213-05:04:01,980 nipype.workflow INFO:\n'
+    b'\t [MultiProc] Running 0 tasks, and 1 jobs ready. Free memory (GB): 6.57/6.57, Free processors: 2/2.\n'
+    b'181213-05:04:02,29 nipype.workflow INFO:\n'
+    b'\t [Node] Setting-up "nibetaseries_participant_wf.single_subject001_wf.correlation_wf.atlas_corr_node" in "/home/travis/build/HBClab/NiBetaSeries/examples/nibetaseries_work/NiBetaSeries_work/nibetaseries_participant_wf/single_subject001_wf/correlation_wf/e4783d34c8ca1d6bda7a1ffd7272437641e9e7cb/atlas_corr_node".\n'
+    b'181213-05:04:02,33 nipype.workflow INFO:\n'
+    b'\t [Node] Setting-up "_atlas_corr_node0" in "/home/travis/build/HBClab/NiBetaSeries/examples/nibetaseries_work/NiBetaSeries_work/nibetaseries_participant_wf/single_subject001_wf/correlation_wf/e4783d34c8ca1d6bda7a1ffd7272437641e9e7cb/atlas_corr_node/mapflow/_atlas_corr_node0".\n'
+    b'181213-05:04:02,34 nipype.workflow INFO:\n'
+    b'\t [Node] Cached "_atlas_corr_node0" - collecting precomputed outputs\n'
+    b'181213-05:04:02,34 nipype.workflow INFO:\n'
+    b'\t [Node] "_atlas_corr_node0" found cached.\n'
+    b'181213-05:04:02,35 nipype.workflow INFO:\n'
+    b'\t [Node] Setting-up "_atlas_corr_node1" in "/home/travis/build/HBClab/NiBetaSeries/examples/nibetaseries_work/NiBetaSeries_work/nibetaseries_participant_wf/single_subject001_wf/correlation_wf/e4783d34c8ca1d6bda7a1ffd7272437641e9e7cb/atlas_corr_node/mapflow/_atlas_corr_node1".\n'
+    b'181213-05:04:02,36 nipype.workflow INFO:\n'
+    b'\t [Node] Cached "_atlas_corr_node1" - collecting precomputed outputs\n'
+    b'181213-05:04:02,36 nipype.workflow INFO:\n'
+    b'\t [Node] "_atlas_corr_node1" found cached.\n'
+    b'181213-05:04:02,37 nipype.workflow INFO:\n'
+    b'\t [Node] Setting-up "_atlas_corr_node2" in "/home/travis/build/HBClab/NiBetaSeries/examples/nibetaseries_work/NiBetaSeries_work/nibetaseries_participant_wf/single_subject001_wf/correlation_wf/e4783d34c8ca1d6bda7a1ffd7272437641e9e7cb/atlas_corr_node/mapflow/_atlas_corr_node2".\n'
+    b'181213-05:04:02,38 nipype.workflow INFO:\n'
+    b'\t [Node] Cached "_atlas_corr_node2" - collecting precomputed outputs\n'
+    b'181213-05:04:02,38 nipype.workflow INFO:\n'
+    b'\t [Node] "_atlas_corr_node2" found cached.\n'
+    b'181213-05:04:02,42 nipype.workflow INFO:\n'
+    b'\t [Node] Finished "nibetaseries_participant_wf.single_subject001_wf.correlation_wf.atlas_corr_node".\n'
+    b'181213-05:04:03,980 nipype.workflow INFO:\n'
+    b'\t [Job 1] Completed (nibetaseries_participant_wf.single_subject001_wf.correlation_wf.atlas_corr_node).\n'
+    b'181213-05:04:03,982 nipype.workflow INFO:\n'
+    b'\t [MultiProc] Running 0 tasks, and 1 jobs ready. Free memory (GB): 6.57/6.57, Free processors: 2/2.\n'
+    b'181213-05:04:05,983 nipype.workflow INFO:\n'
+    b'\t [MultiProc] Running 0 tasks, and 3 jobs ready. Free memory (GB): 6.57/6.57, Free processors: 2/2.\n'
+    b'181213-05:04:06,26 nipype.workflow INFO:\n'
+    b'\t [Node] Setting-up "_rename_matrix_node0" in "/home/travis/build/HBClab/NiBetaSeries/examples/nibetaseries_work/NiBetaSeries_work/nibetaseries_participant_wf/single_subject001_wf/correlation_wf/e4783d34c8ca1d6bda7a1ffd7272437641e9e7cb/rename_matrix_node/mapflow/_rename_matrix_node0".\n'
+    b'181213-05:04:06,28 nipype.workflow INFO:\n'
+    b'\t [Node] Setting-up "_rename_matrix_node1" in "/home/travis/build/HBClab/NiBetaSeries/examples/nibetaseries_work/NiBetaSeries_work/nibetaseries_participant_wf/single_subject001_wf/correlation_wf/e4783d34c8ca1d6bda7a1ffd7272437641e9e7cb/rename_matrix_node/mapflow/_rename_matrix_node1".\n'
+    b'181213-05:04:06,29 nipype.workflow INFO:\n'
+    b'\t [Node] Running "_rename_matrix_node0" ("nipype.interfaces.utility.wrappers.Function")\n'
+    b'181213-05:04:06,32 nipype.workflow INFO:\n'
+    b'\t [Node] Running "_rename_matrix_node1" ("nipype.interfaces.utility.wrappers.Function")\n'
+    b'181213-05:04:06,38 nipype.workflow INFO:\n'
+    b'\t [Node] Finished "_rename_matrix_node0".\n'
+    b'181213-05:04:06,40 nipype.workflow INFO:\n'
+    b'\t [Node] Finished "_rename_matrix_node1".\n'
+    b'181213-05:04:07,985 nipype.workflow INFO:\n'
+    b'\t [Job 7] Completed (_rename_matrix_node0).\n'
+    b'181213-05:04:07,985 nipype.workflow INFO:\n'
+    b'\t [Job 8] Completed (_rename_matrix_node1).\n'
+    b'181213-05:04:07,987 nipype.workflow INFO:\n'
+    b'\t [MultiProc] Running 0 tasks, and 1 jobs ready. Free memory (GB): 6.57/6.57, Free processors: 2/2.\n'
+    b'181213-05:04:08,29 nipype.workflow INFO:\n'
+    b'\t [Node] Setting-up "_rename_matrix_node2" in "/home/travis/build/HBClab/NiBetaSeries/examples/nibetaseries_work/NiBetaSeries_work/nibetaseries_participant_wf/single_subject001_wf/correlation_wf/e4783d34c8ca1d6bda7a1ffd7272437641e9e7cb/rename_matrix_node/mapflow/_rename_matrix_node2".\n'
+    b'181213-05:04:08,31 nipype.workflow INFO:\n'
+    b'\t [Node] Running "_rename_matrix_node2" ("nipype.interfaces.utility.wrappers.Function")\n'
+    b'181213-05:04:08,37 nipype.workflow INFO:\n'
+    b'\t [Node] Finished "_rename_matrix_node2".\n'
+    b'181213-05:04:09,987 nipype.workflow INFO:\n'
+    b'\t [Job 9] Completed (_rename_matrix_node2).\n'
+    b'181213-05:04:09,988 nipype.workflow INFO:\n'
+    b'\t [MultiProc] Running 0 tasks, and 1 jobs ready. Free memory (GB): 6.57/6.57, Free processors: 2/2.\n'
+    b'181213-05:04:10,32 nipype.workflow INFO:\n'
+    b'\t [Node] Setting-up "nibetaseries_participant_wf.single_subject001_wf.correlation_wf.rename_matrix_node" in "/home/travis/build/HBClab/NiBetaSeries/examples/nibetaseries_work/NiBetaSeries_work/nibetaseries_participant_wf/single_subject001_wf/correlation_wf/e4783d34c8ca1d6bda7a1ffd7272437641e9e7cb/rename_matrix_node".\n'
+    b'181213-05:04:10,35 nipype.workflow INFO:\n'
+    b'\t [Node] Setting-up "_rename_matrix_node0" in "/home/travis/build/HBClab/NiBetaSeries/examples/nibetaseries_work/NiBetaSeries_work/nibetaseries_participant_wf/single_subject001_wf/correlation_wf/e4783d34c8ca1d6bda7a1ffd7272437641e9e7cb/rename_matrix_node/mapflow/_rename_matrix_node0".\n'
+    b'181213-05:04:10,37 nipype.workflow INFO:\n'
+    b'\t [Node] Cached "_rename_matrix_node0" - collecting precomputed outputs\n'
+    b'181213-05:04:10,37 nipype.workflow INFO:\n'
+    b'\t [Node] "_rename_matrix_node0" found cached.\n'
+    b'181213-05:04:10,38 nipype.workflow INFO:\n'
+    b'\t [Node] Setting-up "_rename_matrix_node1" in "/home/travis/build/HBClab/NiBetaSeries/examples/nibetaseries_work/NiBetaSeries_work/nibetaseries_participant_wf/single_subject001_wf/correlation_wf/e4783d34c8ca1d6bda7a1ffd7272437641e9e7cb/rename_matrix_node/mapflow/_rename_matrix_node1".\n'
+    b'181213-05:04:10,39 nipype.workflow INFO:\n'
+    b'\t [Node] Cached "_rename_matrix_node1" - collecting precomputed outputs\n'
+    b'181213-05:04:10,39 nipype.workflow INFO:\n'
+    b'\t [Node] "_rename_matrix_node1" found cached.\n'
+    b'181213-05:04:10,41 nipype.workflow INFO:\n'
+    b'\t [Node] Setting-up "_rename_matrix_node2" in "/home/travis/build/HBClab/NiBetaSeries/examples/nibetaseries_work/NiBetaSeries_work/nibetaseries_participant_wf/single_subject001_wf/correlation_wf/e4783d34c8ca1d6bda7a1ffd7272437641e9e7cb/rename_matrix_node/mapflow/_rename_matrix_node2".\n'
+    b'181213-05:04:10,42 nipype.workflow INFO:\n'
+    b'\t [Node] Cached "_rename_matrix_node2" - collecting precomputed outputs\n'
+    b'181213-05:04:10,42 nipype.workflow INFO:\n'
+    b'\t [Node] "_rename_matrix_node2" found cached.\n'
+    b'181213-05:04:10,46 nipype.workflow INFO:\n'
+    b'\t [Node] Finished "nibetaseries_participant_wf.single_subject001_wf.correlation_wf.rename_matrix_node".\n'
+    b'181213-05:04:11,989 nipype.workflow INFO:\n'
+    b'\t [Job 2] Completed (nibetaseries_participant_wf.single_subject001_wf.correlation_wf.rename_matrix_node).\n'
+    b'181213-05:04:11,991 nipype.workflow INFO:\n'
+    b'\t [MultiProc] Running 0 tasks, and 1 jobs ready. Free memory (GB): 6.57/6.57, Free processors: 2/2.\n'
+    b'181213-05:04:13,992 nipype.workflow INFO:\n'
+    b'\t [MultiProc] Running 0 tasks, and 3 jobs ready. Free memory (GB): 6.57/6.57, Free processors: 2/2.\n'
+    b'181213-05:04:14,37 nipype.workflow INFO:\n'
+    b'\t [Node] Setting-up "_ds_correlation_matrix0" in "/home/travis/build/HBClab/NiBetaSeries/examples/nibetaseries_work/NiBetaSeries_work/nibetaseries_participant_wf/single_subject001_wf/e4783d34c8ca1d6bda7a1ffd7272437641e9e7cb/ds_correlation_matrix/mapflow/_ds_correlation_matrix0".\n'
+    b'181213-05:04:14,42 nipype.workflow INFO:\n'
+    b'\t [Node] Setting-up "_ds_correlation_matrix1" in "/home/travis/build/HBClab/NiBetaSeries/examples/nibetaseries_work/NiBetaSeries_work/nibetaseries_participant_wf/single_subject001_wf/e4783d34c8ca1d6bda7a1ffd7272437641e9e7cb/ds_correlation_matrix/mapflow/_ds_correlation_matrix1".\n'
+    b'181213-05:04:14,42 nipype.workflow INFO:\n'
+    b'\t [Node] Running "_ds_correlation_matrix0" ("nibetaseries.interfaces.bids.DerivativesDataSink")\n'
+    b'181213-05:04:14,45 nipype.workflow INFO:\n'
+    b'\t [Node] Running "_ds_correlation_matrix1" ("nibetaseries.interfaces.bids.DerivativesDataSink")\n'
+    b'181213-05:04:14,50 nipype.workflow INFO:\n'
+    b'\t [Node] Finished "_ds_correlation_matrix0".\n'
+    b'181213-05:04:14,53 nipype.workflow INFO:\n'
+    b'\t [Node] Finished "_ds_correlation_matrix1".\n'
+    b'181213-05:04:15,993 nipype.workflow INFO:\n'
+    b'\t [Job 10] Completed (_ds_correlation_matrix0).\n'
+    b'181213-05:04:15,994 nipype.workflow INFO:\n'
+    b'\t [Job 11] Completed (_ds_correlation_matrix1).\n'
+    b'181213-05:04:15,996 nipype.workflow INFO:\n'
+    b'\t [MultiProc] Running 0 tasks, and 1 jobs ready. Free memory (GB): 6.57/6.57, Free processors: 2/2.\n'
+    b'181213-05:04:16,43 nipype.workflow INFO:\n'
+    b'\t [Node] Setting-up "_ds_correlation_matrix2" in "/home/travis/build/HBClab/NiBetaSeries/examples/nibetaseries_work/NiBetaSeries_work/nibetaseries_participant_wf/single_subject001_wf/e4783d34c8ca1d6bda7a1ffd7272437641e9e7cb/ds_correlation_matrix/mapflow/_ds_correlation_matrix2".\n'
+    b'181213-05:04:16,45 nipype.workflow INFO:\n'
+    b'\t [Node] Running "_ds_correlation_matrix2" ("nibetaseries.interfaces.bids.DerivativesDataSink")\n'
+    b'181213-05:04:16,51 nipype.workflow INFO:\n'
+    b'\t [Node] Finished "_ds_correlation_matrix2".\n'
+    b'181213-05:04:17,995 nipype.workflow INFO:\n'
+    b'\t [Job 12] Completed (_ds_correlation_matrix2).\n'
+    b'181213-05:04:17,997 nipype.workflow INFO:\n'
+    b'\t [MultiProc] Running 0 tasks, and 1 jobs ready. Free memory (GB): 6.57/6.57, Free processors: 2/2.\n'
+    b'181213-05:04:18,46 nipype.workflow INFO:\n'
+    b'\t [Node] Setting-up "nibetaseries_participant_wf.single_subject001_wf.ds_correlation_matrix" in "/home/travis/build/HBClab/NiBetaSeries/examples/nibetaseries_work/NiBetaSeries_work/nibetaseries_participant_wf/single_subject001_wf/e4783d34c8ca1d6bda7a1ffd7272437641e9e7cb/ds_correlation_matrix".\n'
+    b'181213-05:04:18,49 nipype.workflow INFO:\n'
+    b'\t [Node] Setting-up "_ds_correlation_matrix0" in "/home/travis/build/HBClab/NiBetaSeries/examples/nibetaseries_work/NiBetaSeries_work/nibetaseries_participant_wf/single_subject001_wf/e4783d34c8ca1d6bda7a1ffd7272437641e9e7cb/ds_correlation_matrix/mapflow/_ds_correlation_matrix0".\n'
+    b'181213-05:04:18,52 nipype.workflow INFO:\n'
+    b'\t [Node] Running "_ds_correlation_matrix0" ("nibetaseries.interfaces.bids.DerivativesDataSink")\n'
+    b'181213-05:04:18,58 nipype.workflow INFO:\n'
+    b'\t [Node] Finished "_ds_correlation_matrix0".\n'
+    b'181213-05:04:18,59 nipype.workflow INFO:\n'
+    b'\t [Node] Setting-up "_ds_correlation_matrix1" in "/home/travis/build/HBClab/NiBetaSeries/examples/nibetaseries_work/NiBetaSeries_work/nibetaseries_participant_wf/single_subject001_wf/e4783d34c8ca1d6bda7a1ffd7272437641e9e7cb/ds_correlation_matrix/mapflow/_ds_correlation_matrix1".\n'
+    b'181213-05:04:18,62 nipype.workflow INFO:\n'
+    b'\t [Node] Running "_ds_correlation_matrix1" ("nibetaseries.interfaces.bids.DerivativesDataSink")\n'
+    b'181213-05:04:18,68 nipype.workflow INFO:\n'
+    b'\t [Node] Finished "_ds_correlation_matrix1".\n'
+    b'181213-05:04:18,70 nipype.workflow INFO:\n'
+    b'\t [Node] Setting-up "_ds_correlation_matrix2" in "/home/travis/build/HBClab/NiBetaSeries/examples/nibetaseries_work/NiBetaSeries_work/nibetaseries_participant_wf/single_subject001_wf/e4783d34c8ca1d6bda7a1ffd7272437641e9e7cb/ds_correlation_matrix/mapflow/_ds_correlation_matrix2".\n'
+    b'181213-05:04:18,72 nipype.workflow INFO:\n'
+    b'\t [Node] Running "_ds_correlation_matrix2" ("nibetaseries.interfaces.bids.DerivativesDataSink")\n'
+    b'181213-05:04:18,78 nipype.workflow INFO:\n'
+    b'\t [Node] Finished "_ds_correlation_matrix2".\n'
+    b'181213-05:04:18,82 nipype.workflow INFO:\n'
+    b'\t [Node] Finished "nibetaseries_participant_wf.single_subject001_wf.ds_correlation_matrix".\n'
+    b'181213-05:04:19,997 nipype.workflow INFO:\n'
+    b'\t [Job 3] Completed (nibetaseries_participant_wf.single_subject001_wf.ds_correlation_matrix).\n'
+    b'181213-05:04:19,999 nipype.workflow INFO:\n'
+    b'\t [MultiProc] Running 0 tasks, and 0 jobs ready. Free memory (GB): 6.57/6.57, Free processors: 2/2.\n'
+
+
+Collect results
+===============
+
+
+
+.. code-block:: python
+
+
+    corr_mat_path = os.path.join(out_dir, "NiBetaSeries", "nibetaseries", "sub-001", "func")
+    trial_types = ['congruent', 'incongruent', 'neutral']
+    filename_template = "sub-001_task-stroop_bold_space-MNI152NLin2009cAsym_preproc_trialtype-{trial_type}_matrix.tsv"
+    pd_dict = {}
+    for trial_type in trial_types:
+        file_path = os.path.join(corr_mat_path, filename_template.format(trial_type=trial_type))
+        pd_dict[trial_type] = pd.read_csv(file_path, sep='\t', na_values="n/a", index_col=0)
+    # display example matrix
+    pd_dict[trial_type].head()
+
+
+
+
+
+
+
+Graph the results
+=================
+
+
+
+.. code-block:: python
+
+
+    fig, axes = plt.subplots(nrows=3, ncols=1, sharex=True, sharey=True, figsize=(10, 30),
+                             gridspec_kw={'wspace': 0.025, 'hspace': 0.075})
+
+    cbar_ax = fig.add_axes([.91, .3, .03, .4])
+    r = 0
+    for trial_type, df in pd_dict.items():
+        g = sns.heatmap(df, ax=axes[r], vmin=-.5, vmax=1., square=True,
+                        cbar=True, cbar_ax=cbar_ax)
+        axes[r].set_title(trial_type)
+        # iterate over rows
+        r += 1
+    plt.tight_layout()
+
+
+
+.. image:: /auto_examples/images/sphx_glr_plot_run_nibetaseries_001.png
+    :class: sphx-glr-single-img
+
+
+
+
+**Total running time of the script:** ( 20 minutes  14.191 seconds)
+
+
+.. _sphx_glr_download_auto_examples_plot_run_nibetaseries.py:
+
+
+.. only :: html
+
+ .. container:: sphx-glr-footer
+    :class: sphx-glr-footer-example
+
+
+
+  .. container:: sphx-glr-download
+
+     :download:`Download Python source code: plot_run_nibetaseries.py <plot_run_nibetaseries.py>`
+
+
+
+  .. container:: sphx-glr-download
+
+     :download:`Download Jupyter notebook: plot_run_nibetaseries.ipynb <plot_run_nibetaseries.ipynb>`
+
+
+.. only:: html
+
+ .. rst-class:: sphx-glr-signature
+
+    `Gallery generated by Sphinx-Gallery <https://sphinx-gallery.readthedocs.io>`_

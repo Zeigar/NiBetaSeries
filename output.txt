@@ -1,0 +1,12 @@
+Results of doctest builder run on 2018-12-13 04:44:10
+=====================================================
+
+Document: reference/nibetaseries
+--------------------------------
+
+Doctest summary
+===============
+    0 tests
+    0 failures in tests
+    0 failures in setup code
+    0 failures in cleanup code

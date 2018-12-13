@@ -1,0 +1,461 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Betaseries &mdash; NiBetaSeries 0.1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/gallery.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Installation" href="installation.html" />
+    <link rel="prev" title="NiBetaSeries" href="readme.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> NiBetaSeries
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="readme.html">NiBetaSeries</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Betaseries</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#relationship-to-resting-state">Relationship to Resting State</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#relationship-to-traditional-task-analysis">Relationship to Traditional Task Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#conceptual-background">Conceptual Background</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#math-background">Math Background</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#relevent-software">Relevent Software</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#other-relevant-readings">Other Relevant Readings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#references">References</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="auto_examples/index.html">How to run NiBetaSeries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="workflows.html">Workflows</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference/index.html">Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing to NiBetaSeries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="authors.html">Authors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">0.2.2 (November 15, 2018)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html#november-13-2018">0.2.1 (November 13, 2018)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html#id1">0.2.0 (November 13, 2018)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html#id2">0.1.0 (2018-06-08)</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">NiBetaSeries</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Betaseries</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/betaseries.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="betaseries">
+<h1>Betaseries<a class="headerlink" href="#betaseries" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>Betaseries track the trial-to-trial modelled hemodynamic fluctuations
+that occur within task functional magnetic resonance imaging (task fMRI).
+This fills an important analytical gap between measuring hemodynamic
+fluctuations in resting state fMRI and measuring regional activations
+via cognitive subtraction in task fMRI.</p>
+</div>
+<div class="section" id="relationship-to-resting-state">
+<h2>Relationship to Resting State<a class="headerlink" href="#relationship-to-resting-state" title="Permalink to this headline">¶</a></h2>
+<p>Betaseries is similar to resting state because the same analytical strategies
+applied to resting state data can ostensibly be applied to betaseries.
+At the core of both resting state and betaseries we are working with
+a list of numbers at each voxel.
+We can correlate, estimate regional homogeneity, perform independent
+components analysis, or conduct a number of different analyses
+with these voxels.
+However, betaseries deviates from resting state in two important ways.
+First, you can do cognitive subtraction using betaseries.
+Second, interpretation of the lists of numbers are different for
+resting state and betaseries.
+Resting state measures the unmodelled hemodynamic fluctuations that occur
+without explicit stimuli.
+Betaseries, on the other hand, measures the modelled hemodynamic fluctuations
+that occur in response to an explicit stimulus.
+Both resting state and betaseries may measure intrinsic connectivity,
+but betaseries may also measure the task evoked connectivity
+(e.g. connectivity between regions that is increased during some
+cognitive process).</p>
+</div>
+<div class="section" id="relationship-to-traditional-task-analysis">
+<h2>Relationship to Traditional Task Analysis<a class="headerlink" href="#relationship-to-traditional-task-analysis" title="Permalink to this headline">¶</a></h2>
+<p>Betaseries is also similar to traditional task analysis because
+cognitive subtraction can be used in both.
+As with resting state, betaseries deviates from traditional task analysis
+in several important ways.
+Say we are interested in observing how the brain responds to faces
+versus houses.
+The experimenter has a timestamp of exactly when and how long
+a face or house is presented.
+That timestamp information is typically convolved with a hemodynamic
+response function (HRF) to represent how the brain stereotypically responds to
+any stimulus resulting in a model of how we expect the brain to respond
+to places and/or faces.
+This is where traditional task analysis and betaseries diverge.
+In traditional task analysis all the face trials are estimated at once,
+giving one summary measure for how strongly each voxel was activated
+(same for house trials).
+The experimenter can subtract the summary measure of faces from houses
+to see which voxels are more responsive to houses relative to faces
+(i.e. cognitive subtraction).
+In betaseries each trial is estimated separately each voxel has as many
+estimates at there are trials (which can be labelled as either
+face or house trials).
+The experimenter can now reduce the series of estimates (a betaseries)
+for each voxel into a summary measure such as a correlation with
+region(s) of interest.
+The correlation map for faces can be subtracted from houses, giving
+voxels that are more correlated with the region of interest for houses
+relative to faces.
+Whereas traditional task analysis treats the variance of brain responses
+between trials of the same type (e.g. face or house) as noise,
+betaseries leverages this variance to make conclusions about which brain
+regions may communicate with each other during a particular trial type
+(e.g. faces or houses).</p>
+</div>
+<div class="section" id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h2>
+<p>Betaseries is not in opposition to resting state or traditional task analysis,
+the methods are complementary.
+For example, network parcelations derived from resting state data can be
+used on betaseries data to ascertain if the networks observed in resting state
+follow a similar pattern with betaseries.
+Additionally, regions determined from traditional task analysis
+can be used as regions of interest for betaseries analysis.
+Betaseries straddles the line between traditional task analysis and
+resting state, observing task data through a network lens.</p>
+</div>
+<div class="section" id="conceptual-background">
+<h2>Conceptual Background<a class="headerlink" href="#conceptual-background" title="Permalink to this headline">¶</a></h2>
+<p>Jesse Rissman <a class="reference internal" href="#rissman2004" id="id1">[Rissman2004]</a> was the first to publish on betaseries
+correlations describing their usage in the context of a working memory task.
+In this task, participants saw a cue, a delay, and a probe, all occurring
+close in time.
+A cue was presented for one second, a delay occurred for seven seconds,
+and a probe was presented for one second.
+Given the HRF takes approximately six seconds to reach its
+peak, and generally takes over 20 seconds to completely resolve, we can
+begin to see a problem.
+The events within the trials occur too close to each other to discern what
+brain responses are related to encoding the cue, the delay, or the probe.
+To discern how the activated brain regions form networks, Rissman
+conceptualized betaseries correlations.
+Instead of having a single regressor to describe all the cue events,
+a single regressor for all the delay events, and a single regressor for all the
+probe events (as is done in traditional task analysis),
+there is an individual regressor for every event in the experiment.
+For example, if your experiment has 40 trials, each with a cue, delay, and
+probe event, the model will have a total of 120 regressors, fitting a beta
+estimate for each trial.
+Complete this process for each trial of a given event type (e.g. cue), at
+the end you will have <code class="docutils literal notranslate"><span class="pre">4D</span></code> volume where each volume represents the beta
+estimates for a particular trial, and each voxel represents a specific
+beta estimate.</p>
+<p>Having one regressor per trial in a single model is known as least squares all.
+This method, however, has limitations in the context of fast event related
+designs.
+Since each trial has its own regressor, trials that occur very close in time
+are colinear (e.g. are very overlapping).
+Jeanette Mumford et al. <a class="reference internal" href="#mumford2012" id="id2">[Mumford2012]</a> investigated this issue in the context
+of image classification.
+In this article, Mumford introduces another modelling strategy known as least
+squares separate.
+In this modelling strategy, instead of having one GLM with a regressor per
+trial, least squares separate implements a GLM per trial with two regressors:
+1) one for the trial of interest, and 2) one for every other trial in the
+experiment.
+This process reduces the colinearity of the regressors and creates a more valid
+estimate of how each regressor fits the data.</p>
+</div>
+<div class="section" id="math-background">
+<h2>Math Background<a class="headerlink" href="#math-background" title="Permalink to this headline">¶</a></h2>
+<div class="math notranslate nohighlight">
+\[\begin{equation}
+     Y = X\beta + \epsilon
+ \end{equation}\]</div>
+<p>The above equation is the General Linear Model (GLM) presented using
+matrix notation.
+<span class="math notranslate nohighlight">\(Y\)</span> represents the time-series we are attempting to explain.
+The <span class="math notranslate nohighlight">\(\beta\)</span> assumes any value that minimizes the squared error between
+the modeled data and the actual data, <span class="math notranslate nohighlight">\(Y\)</span>.
+Finally, <span class="math notranslate nohighlight">\(\epsilon\)</span> (epsilon) refers to the error that is not captured
+by the model.
+Within a GLM, trial-to-trial betas may be averaged for a given trial type
+and the variance is treated as noise.
+However, those trial-to-trial fluctuations may also contain important
+information the typical GLM will ignore/penalize.
+With a couple modifications to the above equation, we arrive at calculating a
+betaseries.</p>
+<div class="math notranslate nohighlight">
+\[\begin{equation}
+    Y = X_1\beta_1 + X_2\beta_2 + . . . + X_n\beta_n + \epsilon
+\end{equation}\]</div>
+<p>With the betaseries equation, a beta is estimated for every trial, instead of
+for each trial type (or whatever logical grouping).
+This gives us the ability to align all the trial betas from a single trial
+type into a list (i.e. series).
+This operation is completed for all voxels, giving us as many lists of betas
+as there are voxels in the data.
+Essentially, we are given a <code class="docutils literal notranslate"><span class="pre">4-D</span></code> dataset where the fourth dimension
+represents trial number instead of time (as the fourth dimension is
+represented in resting state).
+And analogous to resting state data, we can perform correlations between the
+voxels to discern which voxels (or which aggregation of voxels) synchronize
+best with other voxels.</p>
+<p>There is one final concept to cover in order to understand how the betas are
+estimated in <code class="docutils literal notranslate"><span class="pre">NiBetaSeries</span></code>.
+You can model individual betas using a couple different strategies; with a
+least squares all (LSA) approximation which the equation above represents,
+and a least squares separate (LSS) approximation in which each trial is given
+it’s own GLM.
+The advantage of LSS comes from reducing the colinearity between closely spaced
+trials.
+In LSA, if trials occurred close in time then it would be difficult to model
+whether the fluctuations should be attributed to one trial or the other.
+LSS reduces this ambiguity by only having two regressors: one for the trial
+of interest and another for every other trial.
+This reduces the colinearity between regressors and makes each beta estimate
+more reliable.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">trial</span><span class="p">,</span> <span class="n">beta</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">trials</span><span class="p">,</span> <span class="n">betas</span><span class="p">):</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="n">trial</span><span class="p">]</span> <span class="o">*</span> <span class="n">beta</span> <span class="o">+</span> <span class="n">error</span>
+</pre></div>
+</div>
+<p>This python psuedocode demonstrates LSS where each trial
+is given it’s own model.</p>
+</div>
+<div class="section" id="relevent-software">
+<h2>Relevent Software<a class="headerlink" href="#relevent-software" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="https://www.nitrc.org/projects/basco/">BASCO</a> (BetA Series COrrelations) is a matlab program that also performs
+betaseries correlations</p>
+</div>
+<div class="section" id="other-relevant-readings">
+<h2>Other Relevant Readings<a class="headerlink" href="#other-relevant-readings" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>[Cisler2014]</li>
+<li>[Gottlich2015]</li>
+<li>[Abdulrahman2016]</li>
+</ul>
+</div>
+<div class="section" id="references">
+<h2>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
+<table class="docutils citation" frame="void" id="rissman2004" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[Rissman2004]</a></td><td><a class="reference external" href="https://www.ncbi.nlm.nih.gov/pubmed/15488425">https://www.ncbi.nlm.nih.gov/pubmed/15488425</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="mumford2012" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[Mumford2012]</a></td><td><a class="reference external" href="https://www.ncbi.nlm.nih.gov/pubmed/21924359">https://www.ncbi.nlm.nih.gov/pubmed/21924359</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="cisler2014" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[Cisler2014]</td><td><a class="reference external" href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4019671/">https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4019671/</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="gottlich2015" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[Gottlich2015]</td><td><a class="reference external" href="https://www.frontiersin.org/articles/10.3389/fnsys.2015.00126/full">https://www.frontiersin.org/articles/10.3389/fnsys.2015.00126/full</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="abdulrahman2016" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[Abdulrahman2016]</td><td><a class="reference external" href="https://www.ncbi.nlm.nih.gov/pubmed/26549299">https://www.ncbi.nlm.nih.gov/pubmed/26549299</a></td></tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="installation.html" class="btn btn-neutral float-right" title="Installation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="readme.html" class="btn btn-neutral" title="NiBetaSeries" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, James Kent
+      Last updated on Dec 13, 2018.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+
+  
+
+  <script type="text/javascript" src="_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

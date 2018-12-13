@@ -1,0 +1,10 @@
+strict digraph  {
+"input_node (utility)";
+"atlas_corr_node (nilearn)";
+"rename_matrix_node (utility)";
+"output_node (utility)";
+"input_node (utility)" -> "atlas_corr_node (nilearn)";
+"input_node (utility)" -> "rename_matrix_node (utility)";
+"atlas_corr_node (nilearn)" -> "rename_matrix_node (utility)";
+"rename_matrix_node (utility)" -> "output_node (utility)";
+}
