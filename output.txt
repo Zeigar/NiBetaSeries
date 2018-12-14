@@ -1,4 +1,4 @@
-Results of doctest builder run on 2018-12-13 18:14:35
+Results of doctest builder run on 2018-12-14 02:27:14
 =====================================================
 
 Document: reference/nibetaseries
