@@ -1,7 +1,0 @@
-strict digraph  {
-"input_node (utility)";
-"betaseries_node (nistats)";
-"output_node (utility)";
-"input_node (utility)" -> "betaseries_node (nistats)";
-"betaseries_node (nistats)" -> "output_node (utility)";
-}

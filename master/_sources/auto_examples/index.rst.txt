@@ -40,13 +40,13 @@ Below is an example run through of NiBetaSeries
 
   .. container:: sphx-glr-download
 
-    :download:`Download all examples in Python source code: auto_examples_python.zip <//tmp/tmpmk69i6x2sphinxcontrib_versioning/1fdec6f3775167e1b7d227b70a2a91c75acad82e/docs/auto_examples/auto_examples_python.zip>`
+    :download:`Download all examples in Python source code: auto_examples_python.zip <//tmp/tmpwi6qlfn3sphinxcontrib_versioning/d15fc3f020ea8c0c6a2a7269df2161ff857dec55/docs/auto_examples/auto_examples_python.zip>`
 
 
 
   .. container:: sphx-glr-download
 
-    :download:`Download all examples in Jupyter notebooks: auto_examples_jupyter.zip <//tmp/tmpmk69i6x2sphinxcontrib_versioning/1fdec6f3775167e1b7d227b70a2a91c75acad82e/docs/auto_examples/auto_examples_jupyter.zip>`
+    :download:`Download all examples in Jupyter notebooks: auto_examples_jupyter.zip <//tmp/tmpwi6qlfn3sphinxcontrib_versioning/d15fc3f020ea8c0c6a2a7269df2161ff857dec55/docs/auto_examples/auto_examples_jupyter.zip>`
 
 
 .. only:: html
