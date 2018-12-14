@@ -1,0 +1,423 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Usage &mdash; NiBetaSeries 0.1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/banner.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Workflows" href="workflows.html" />
+    <link rel="prev" title="Installation" href="installation.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> NiBetaSeries
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="readme.html">NiBetaSeries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="betaseries.html">Betaseries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Usage</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#command-line-arguments">Command-Line Arguments</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Positional Arguments">Positional Arguments</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Named Arguments">Named Arguments</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Options for preprocessing">Options for preprocessing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Options for selecting images">Options for selecting images</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Options for processing beta_series">Options for processing beta_series</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Options to handle performance">Options to handle performance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#misc options">misc options</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="workflows.html">Workflows</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference/index.html">Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing to NiBetaSeries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="authors.html">Authors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">0.2.2 (November 15, 2018)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html#november-13-2018">0.2.1 (November 13, 2018)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html#id1">0.2.0 (November 13, 2018)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html#id2">0.1.0 (2018-06-08)</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">NiBetaSeries</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Usage</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/usage.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="usage">
+<h1>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="command-line-arguments">
+<h2>Command-Line Arguments<a class="headerlink" href="#command-line-arguments" title="Permalink to this headline">¶</a></h2>
+<p>NiBetaSeries BIDS arguments</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">usage</span><span class="p">:</span> <span class="n">nibs</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">v</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">sm</span> <span class="n">SMOOTHING_KERNEL</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">lp</span> <span class="n">LOW_PASS</span><span class="p">]</span>
+            <span class="p">[</span><span class="o">-</span><span class="n">c</span> <span class="n">CONFOUNDS</span> <span class="p">[</span><span class="n">CONFOUNDS</span> <span class="o">...</span><span class="p">]]</span> <span class="p">[</span><span class="o">-</span><span class="n">w</span> <span class="n">WORK_DIR</span><span class="p">]</span>
+            <span class="p">[</span><span class="o">--</span><span class="n">participant_label</span> <span class="n">PARTICIPANT_LABEL</span> <span class="p">[</span><span class="n">PARTICIPANT_LABEL</span> <span class="o">...</span><span class="p">]]</span>
+            <span class="p">[</span><span class="o">--</span><span class="n">session_label</span> <span class="n">SESSION_LABEL</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">t</span> <span class="n">TASK_LABEL</span><span class="p">]</span>
+            <span class="p">[</span><span class="o">--</span><span class="n">run_label</span> <span class="n">RUN_LABEL</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">sp</span> <span class="p">{</span><span class="n">MNI152NLin2009cAsym</span><span class="p">}]</span>
+            <span class="p">[</span><span class="o">--</span><span class="n">variant_label</span> <span class="n">VARIANT_LABEL</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">exclude_variant_label</span><span class="p">]</span>
+            <span class="p">[</span><span class="o">--</span><span class="n">hrf_model</span> <span class="p">{</span><span class="n">glover</span><span class="p">,</span><span class="n">spm</span><span class="p">,</span><span class="n">fir</span><span class="p">,</span><span class="n">glover</span> <span class="o">+</span> <span class="n">derivative</span><span class="p">,</span><span class="n">glover</span> <span class="o">+</span> <span class="n">derivative</span> <span class="o">+</span> <span class="n">dispersion</span><span class="p">,</span><span class="n">spm</span> <span class="o">+</span> <span class="n">derivative</span><span class="p">,</span><span class="n">spm</span> <span class="o">+</span> <span class="n">derivative</span> <span class="o">+</span> <span class="n">dispersion</span><span class="p">}]</span>
+            <span class="p">[</span><span class="o">-</span><span class="n">a</span> <span class="n">ATLAS_IMG</span><span class="p">]</span> <span class="o">-</span><span class="n">l</span> <span class="n">ATLAS_LUT</span> <span class="p">[</span><span class="o">--</span><span class="n">nthreads</span> <span class="n">NTHREADS</span><span class="p">]</span>
+            <span class="p">[</span><span class="o">--</span><span class="n">use</span><span class="o">-</span><span class="n">plugin</span> <span class="n">USE_PLUGIN</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">graph</span><span class="p">]</span>
+            <span class="n">bids_dir</span> <span class="n">derivatives_pipeline</span> <span class="n">output_dir</span> <span class="p">{</span><span class="n">participant</span><span class="p">,</span><span class="n">group</span><span class="p">}</span>
+</pre></div>
+</div>
+<div class="section" id="Positional Arguments">
+<h3>Positional Arguments<a class="headerlink" href="#Positional Arguments" title="Permalink to this headline">¶</a></h3>
+<table class="docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group">
+<kbd>bids_dir</kbd></td>
+<td>The directory with the input dataset formatted according to the BIDS standard.</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd>derivatives_pipeline</kbd></td>
+</tr>
+<tr><td>&#160;</td><td>The pipeline that contains minimally preprocessed img, brainmask, and confounds.tsv</td></tr>
+<tr><td class="option-group">
+<kbd>output_dir</kbd></td>
+<td>The directory where the output directory and files should be stored. If you are running group level analysis this folder should be prepopulated with the results of theparticipant level analysis.</td></tr>
+<tr><td class="option-group">
+<kbd>analysis_level</kbd></td>
+<td><p class="first">Possible choices: participant, group</p>
+<p class="last">Level of the analysis that will be performed Multiple participant level analyses can be run independently (in parallel) using the same output_dir</p>
+</td></tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="Named Arguments">
+<h3>Named Arguments<a class="headerlink" href="#Named Arguments" title="Permalink to this headline">¶</a></h3>
+<table class="docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group">
+<kbd>-v, --version</kbd></td>
+<td>show program’s version number and exit</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd>--participant_label</kbd></td>
+</tr>
+<tr><td>&#160;</td><td>The label(s) of the participant(s) that should be analyzed. The label corresponds to sub-&lt;participant_label&gt; from the BIDS spec (so it does not include “sub-“). If this parameter is not provided all subjects should be analyzed. Multiple participants can be specified with a space separated list.</td></tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="Options for preprocessing">
+<h3>Options for preprocessing<a class="headerlink" href="#Options for preprocessing" title="Permalink to this headline">¶</a></h3>
+<table class="docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd>-sm, --smoothing_kernel</kbd></td>
+</tr>
+<tr><td>&#160;</td><td>select a smoothing kernel (mm)</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd>-lp, --low_pass</kbd></td>
+</tr>
+<tr><td>&#160;</td><td>low pass filter (Hz)</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd>-c, --confounds</kbd></td>
+</tr>
+<tr><td>&#160;</td><td>The confound column names that are to be included in nuisance regression. write the confounds you wish to include separated by a space</td></tr>
+<tr><td class="option-group">
+<kbd>-w, --work_dir</kbd></td>
+<td>directory where temporary files are stored</td></tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="Options for selecting images">
+<h3>Options for selecting images<a class="headerlink" href="#Options for selecting images" title="Permalink to this headline">¶</a></h3>
+<table class="docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd>--session_label</kbd></td>
+</tr>
+<tr><td>&#160;</td><td>select a session to analyze</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd>-t, --task_label</kbd></td>
+</tr>
+<tr><td>&#160;</td><td>select a specific task to be processed</td></tr>
+<tr><td class="option-group">
+<kbd>--run_label</kbd></td>
+<td>select a run to analyze</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd>-sp, --space_label</kbd></td>
+</tr>
+<tr><td>&#160;</td><td><p class="first">Possible choices: MNI152NLin2009cAsym</p>
+<p class="last">select a bold derivative in a specific space to be used</p>
+</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd>--variant_label</kbd></td>
+</tr>
+<tr><td>&#160;</td><td>select a variant bold to process</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd>--exclude_variant_label</kbd></td>
+</tr>
+<tr><td>&#160;</td><td>exclude the variant from FMRIPREP</td></tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="Options for processing beta_series">
+<h3>Options for processing beta_series<a class="headerlink" href="#Options for processing beta_series" title="Permalink to this headline">¶</a></h3>
+<table class="docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group">
+<kbd>--hrf_model</kbd></td>
+<td><p class="first">Possible choices: glover, spm, fir, glover + derivative, glover + derivative + dispersion, spm + derivative, spm + derivative + dispersion</p>
+<p class="last">convolve your regressors with one of the following hemodynamic response functions</p>
+</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd>-a, --atlas-img</kbd></td>
+</tr>
+<tr><td>&#160;</td><td>input atlas nifti where each voxel within a “region” is labeled with the same integer and there is a unique integer associated with each region of interest</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd>-l, --atlas-lut</kbd></td>
+</tr>
+<tr><td>&#160;</td><td>atlas look up table (tsv) formatted with the columns: index, regions which correspond to the regions in the nifti file specified by –atlas-img</td></tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="Options to handle performance">
+<h3>Options to handle performance<a class="headerlink" href="#Options to handle performance" title="Permalink to this headline">¶</a></h3>
+<table class="docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd>--nthreads, --n_cpus, -n-cpus</kbd></td>
+</tr>
+<tr><td>&#160;</td><td>maximum number of threads across all processes</td></tr>
+<tr><td class="option-group">
+<kbd>--use-plugin</kbd></td>
+<td>nipype plugin configuration file</td></tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="misc options">
+<h3>misc options<a class="headerlink" href="#misc options" title="Permalink to this headline">¶</a></h3>
+<table class="docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group">
+<kbd>--graph</kbd></td>
+<td>generates a graph png of the workflow</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="workflows.html" class="btn btn-neutral float-right" title="Workflows" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="installation.html" class="btn btn-neutral" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, James Kent
+      Last updated on Aug 02, 2018.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+        <span class="fa fa-book"> Other Versions</span>
+        v: v0.2.2
+        <span class="fa fa-caret-down"></span>
+    </span>
+    <div class="rst-other-versions">
+        <dl>
+            <dt>Tags</dt>
+            <dd><a href="../v0.0.1/usage.html">v0.0.1</a></dd>
+            <dd><a href="../v0.2.0/usage.html">v0.2.0</a></dd>
+            <dd><a href="../v0.2.1/usage.html">v0.2.1</a></dd>
+            <dd><a href="usage.html">v0.2.2</a></dd>
+        </dl>
+        <dl>
+            <dt>Branches</dt>
+            <dd><a href="../master/usage.html">master</a></dd>
+        </dl>
+    </div>
+</div>
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+
+  
+
+  <script type="text/javascript" src="_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

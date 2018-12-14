@@ -1,0 +1,12 @@
+digraph structs {
+node [shape=record];
+betaseries_wfinput_node [label="{IN}|{ input_node | utility |  }|{OUT|<outboldfile> bold_file|<outboldmaskfile> bold_mask_file|<outboldmetadata> bold_metadata|<outconfoundsfile> confounds_file|<outeventsfile> events_file}"];
+betaseries_wfbetaseries_node [label="{IN|<inboldfile> bold_file|<inboldmetadata> bold_metadata|<inconfoundsfile> confounds_file|<ineventsfile> events_file|<inmaskfile> mask_file}|{ betaseries_node | nistats |  }|{OUT|<outbetamaps> beta_maps}"];
+betaseries_wfoutput_node [label="{IN|<inbetaseriesfiles> betaseries_files}|{ output_node | utility |  }|{OUT}"];
+betaseries_wfbetaseries_node:outbetamaps:e -> betaseries_wfoutput_node:inbetaseriesfiles:w;
+betaseries_wfinput_node:outboldfile:e -> betaseries_wfbetaseries_node:inboldfile:w;
+betaseries_wfinput_node:outboldmaskfile:e -> betaseries_wfbetaseries_node:inmaskfile:w;
+betaseries_wfinput_node:outboldmetadata:e -> betaseries_wfbetaseries_node:inboldmetadata:w;
+betaseries_wfinput_node:outconfoundsfile:e -> betaseries_wfbetaseries_node:inconfoundsfile:w;
+betaseries_wfinput_node:outeventsfile:e -> betaseries_wfbetaseries_node:ineventsfile:w;
+}
