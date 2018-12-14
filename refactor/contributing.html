@@ -1,0 +1,565 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Contributing to NiBetaSeries &mdash; NiBetaSeries 0.1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/banner.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Authors" href="authors.html" />
+    <link rel="prev" title="nibetaseries" href="reference/nibetaseries.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> NiBetaSeries
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="readme.html">NiBetaSeries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="betaseries.html">Betaseries Correlations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="workflows.html">Workflows</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference/index.html">Reference</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Contributing to NiBetaSeries</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#table-of-contents">Table of contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#joining-the-bids-community">Joining the BIDS community</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#check-out-the-bids-starter-kit">Check out the BIDS Starter Kit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#get-in-touch">Get in touch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#contributing-through-github">Contributing through GitHub</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#writing-in-markdown">Writing in markdown</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#where-to-start-issue-labels">Where to start: issue labels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#making-a-change-with-a-pull-request">Making a change with a pull request</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#comment-on-an-existing-issue-or-open-a-new-issue-referencing-your-addition">1. Comment on an existing issue or open a new issue referencing your addition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#fork-the-nibetaseries-repository-to-your-profile">2. Fork the NiBetaSeries repository to your profile</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#clone-your-forked-nibetaseries-to-your-work-machine">3. Clone your forked NiBetaSeries to your work machine</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#make-the-changes-you-ve-discussed">4. Make the changes you’ve discussed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#run-the-tests">5. Run the tests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#add-commit-push-the-changes-to-the-nibetaseries-repository">6. Add/Commit/Push the changes to the NiBetaSeries repository</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#submit-a-pull-request">7. Submit a pull request</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#nibetaseries-coding-style-guide">NiBetaSeries coding style guide</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#recognizing-contributions">Recognizing contributions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#thank-you">Thank you!</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="authors.html">Authors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">NiBetaSeries</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Contributing to NiBetaSeries</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/contributing.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="contributing-to-nibetaseries">
+<h1>Contributing to NiBetaSeries<a class="headerlink" href="#contributing-to-nibetaseries" title="Permalink to this headline">¶</a></h1>
+<p><strong>Welcome to the NiBetaSeries repository!</strong></p>
+<p><em>We’re so excited you’re here and want to
+contribute.</em></p>
+<p>NiBetaSeries calculates betaseries correlations using python!
+We hope that these guidelines are designed to make it as easy as possible to contribute to NiBetaSeries
+and the broader Brain Imaging Data Structure (BIDS) community.
+If you have any questions that aren’t discussed below, please let us know through one of the many
+ways to <a class="reference external" href="#get-in-touch">get in touch</a>.</p>
+<div class="section" id="table-of-contents">
+<h2>Table of contents<a class="headerlink" href="#table-of-contents" title="Permalink to this headline">¶</a></h2>
+<p>Been here before? Already know what you’re looking for in this guide?
+Jump to the following sections:</p>
+<ul class="simple">
+<li><a class="reference external" href="#joining-the-bids-community">Joining the BIDS community</a></li>
+<li><a class="reference external" href="#check-bids-starter-kit">Check out the BIDS Starter Kit</a></li>
+<li><a class="reference external" href="#get-in-touch">Get in touch</a></li>
+<li><a class="reference external" href="#contributing-through-github">Contributing through GitHub</a></li>
+<li><a class="reference external" href="#where-to-start-wiki-code-and-templates">Where to start: wiki, code and
+templates</a></li>
+<li><a class="reference external" href="#where-to-start-issue-labels">Where to start: issue labels</a></li>
+<li><a class="reference external" href="#making-a-change-with-a-pull-request">Make a change with a pull
+request</a></li>
+<li><a class="reference external" href="#example-pull-request">Example pull request</a></li>
+<li><a class="reference external" href="#recognizing-contributions">Recognizing contributions</a></li>
+</ul>
+</div>
+<div class="section" id="joining-the-bids-community">
+<h2>Joining the BIDS community<a class="headerlink" href="#joining-the-bids-community" title="Permalink to this headline">¶</a></h2>
+<p>BIDS - the <a class="reference external" href="http://bids.neuroimaging.io">Brain Imaging Data
+Structure</a> - is a growing community of
+neuroimaging enthusiasts, and we want to make our resources accessible
+to and engaging for as many researchers as possible.
+NiBetaSeries will hopefully play a small part towards introducing people to BIDS
+and help the broader community.</p>
+<p>We therefore require that all contributions <strong>adhere to our</strong> <a class="reference external" href="CODE_OF_CONDUCT.md">Code of
+Conduct</a>.</p>
+<p>How do you know that you’re a member of the BIDS community? You’re here!
+You know that BIDS exists! You’re officially a member of the community.
+It’s THAT easy! Welcome!</p>
+</div>
+<div class="section" id="check-out-the-bids-starter-kit">
+<h2>Check out the BIDS Starter Kit<a class="headerlink" href="#check-out-the-bids-starter-kit" title="Permalink to this headline">¶</a></h2>
+<p>If you’re new to BIDS make sure to check out the amazing  <a class="reference external" href="https://github.com/INCF/BIDS-Starter-Kit">BIDS Starter Kit</a>.</p>
+</div>
+<div class="section" id="get-in-touch">
+<h2>Get in touch<a class="headerlink" href="#get-in-touch" title="Permalink to this headline">¶</a></h2>
+<p>There are lots of ways to get in touch with the team maintaining NiBetaSeries if you have
+general questions about the BIDS ecosystem.
+For specific questions about NiBetaSeries, please see the practical guide
+(Currently the main contact is James Kent)</p>
+<ul class="simple">
+<li>Message jdkent on the <a class="reference external" href="https://brainhack.slack.com/messages/C8RG7F6PN">brainhack slack</a></li>
+<li>Click <a class="reference external" href="https://brainhack-slack-invite.herokuapp.com">here</a> for an
+invite to the slack workspace.</li>
+<li>The <a class="reference external" href="https://groups.google.com/forum/#!forum/bids-discussion">BIDS mailing
+list</a></li>
+<li><dl class="first docutils">
+<dt>Via the <a class="reference external" href="https://neurostars.org/tags/bids">Neurostars forum</a>.</dt>
+<dd><ul class="first last">
+<li><strong>This is our preferred way to answer questions so that others who
+have similar questions can benefit too!</strong> Even if your question is
+not well-defined, just post what you have so far and we will be able
+to point you in the right direction!</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div>
+<div class="section" id="contributing-through-github">
+<h2>Contributing through GitHub<a class="headerlink" href="#contributing-through-github" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="https://git-scm.com">git</a> is a really useful tool for version
+control. <a class="reference external" href="https://github.com">GitHub</a> sits on top of git and supports
+collaborative and distributed working.</p>
+<p>We know that it can be daunting to start using git and GitHub if you
+haven’t worked with them in the past, but the NibetaSeries
+maintainer(s) are here to help you figure out any of the jargon or
+confusing instructions you encounter!</p>
+<p>In order to contribute via GitHub you’ll need to set up a free account
+and sign in. Here are some
+<a class="reference external" href="https://help.github.com/articles/signing-up-for-a-new-github-account/">instructions</a>
+to help you get going. Remember that you can ask us any questions you
+need to along the way.</p>
+</div>
+<div class="section" id="writing-in-markdown">
+<h2>Writing in markdown<a class="headerlink" href="#writing-in-markdown" title="Permalink to this headline">¶</a></h2>
+<p>GitHub has a helpful page on <a class="reference external" href="https://help.github.com/articles/getting-started-with-writing-and-formatting-on-github">getting started with writing and
+formatting on
+GitHub</a>.</p>
+<p>Most of the writing that you’ll do will be in
+<a class="reference external" href="https://daringfireball.net/projects/markdown">Markdown</a>. You can
+think of Markdown as a few little symbols around your text that will
+allow GitHub to render the text with a little bit of formatting. For
+example you could write words as bold (<code class="docutils literal notranslate"><span class="pre">**bold**</span></code>), or in italics
+(<code class="docutils literal notranslate"><span class="pre">*italics*</span></code>), or as a <a class="reference external" href="https://www.youtube.com/watch?v=dQw4w9WgXcQ">link</a> to another webpage.</p>
+</div>
+<div class="section" id="where-to-start-issue-labels">
+<h2>Where to start: issue labels<a class="headerlink" href="#where-to-start-issue-labels" title="Permalink to this headline">¶</a></h2>
+<p>The list of labels for current issues can be found
+<a class="reference external" href="https://github.com/HBClab/NiBetaSeries/labels">here</a> and includes:</p>
+<ul>
+<li><p class="first"><a class="reference external" href="https://github.com/HBClab/NiBetaSeries/labels/help%20wanted"><img alt="help-wanted" src="https://img.shields.io/badge/-help%20wanted-%23128A0C.svg" /></a> <em>These issues contain a task that a member of the team
+has determined we need additional help with.</em></p>
+<p>If you feel that you can contribute to one of these issues, we
+especially encourage you to do so!</p>
+</li>
+<li><p class="first"><a class="reference external" href="https://github.com/HBClab/NiBetaSeries/labels/question"><img alt="Question" src="https://img.shields.io/badge/-question-%23cc317c.svg" /></a> <em>These issues contain a question that you’d like to have
+answered.</em></p>
+<p>There are <a class="reference external" href="#get-in-touch">lots of ways to ask questions</a> but
+opening an issue is a great way to start a conversation and get your
+answer. Ideally, we’ll close it out by <a class="reference external" href="https://nibetaseries.readthedocs.io/en/latest/">adding the answer to the
+docs</a>!</p>
+</li>
+<li><p class="first"><a class="reference external" href="https://github.com/HBClab/NiBetaSeries/labels/good%20first%20issue"><img alt="good-first-issue" src="https://img.shields.io/badge/-good%20first%20issue-%239cdb4a.svg" /></a> <em>These issues are particularly appropriate if it
+is your first contribution to NiBetaSeries, or to GitHub
+overall.</em></p>
+<p>If you’re not sure about how to go about contributing, these are good
+places to start. You’ll be mentored through the process by the
+maintainers team. If you’re a seasoned contributor, please select a
+different issue to work from and keep these available for the newer
+and potentially more anxious team members.</p>
+</li>
+<li><p class="first"><a class="reference external" href="https://github.com/HBClab/NiBetaSeries/labels/feature"><img alt="feature" src="https://img.shields.io/badge/-feature-%239d2cd6.svg" /></a> <em>These issues are suggesting new features that can be
+added to the project.</em></p>
+<p>If you want to ask for something new, please try to make sure that
+your request is distinct from any others that are already in the
+queue (or part of NiBetaSeries!). If you find one that’s similar
+but there are subtle differences please reference the other
+enhancement in your issue.</p>
+</li>
+<li><p class="first"><a class="reference external" href="https://github.com/HBClab/NiBetaSeries/labels/documentation"><img alt="documentation" src="https://img.shields.io/badge/-documentation-%2393f9a7.svg" /></a> <em>These issues relate to improving or updating the
+documentation.</em></p>
+<p>These are usually really great issues to help out with: our goal is
+to make it easy to understand BIDS without having to ask anyone any
+questions! Documentation is the ultimate solution</p>
+</li>
+<li><p class="first"><a class="reference external" href="https://github.com/HBClab/NiBetaSeries/labels/bug"><img alt="bug" src="https://img.shields.io/badge/-bug-ee0701.svg" /></a> <em>These issues are reporting a problem or a mistake in the
+project.</em></p>
+<p>The more details you can provide the better! If you know how to fix
+the bug, please open an issue first and then <a class="reference external" href="#making-a-change-with-a-pull-request">submit a pull
+request</a></p>
+<p>We like to model best practice, so NiBetaSeries itself is
+managed through these issues. We may occasionally have some to
+coordinate some logistics.</p>
+</li>
+</ul>
+</div>
+<div class="section" id="making-a-change-with-a-pull-request">
+<h2>Making a change with a pull request<a class="headerlink" href="#making-a-change-with-a-pull-request" title="Permalink to this headline">¶</a></h2>
+<p>We appreciate all contributions to NiBetaSeries. <strong>THANK YOU</strong>
+for helping us build this useful resource.</p>
+<p>Remember that if you’re adding information to the
+<a class="reference external" href="#wiki">wiki</a> you <strong>don’t need to submit a pull request</strong>. You can
+just log into GitHub, navigate to the
+<a class="reference external" href="https://github.com/HBClab/NiBetaSeries/wiki">wiki</a> and click the
+<strong>edit</strong> button.</p>
+<p>If you’re updating the <a class="reference external" href="#code">code</a>, the following steps are a guide to help you
+contribute in a way that will be easy for everyone to review and accept
+with ease.</p>
+<div class="section" id="comment-on-an-existing-issue-or-open-a-new-issue-referencing-your-addition">
+<h3>1. <a class="reference external" href="https://github.com/HBClab/NiBetaSeries/issues">Comment on an existing issue or open a new issue referencing your addition</a><a class="headerlink" href="#comment-on-an-existing-issue-or-open-a-new-issue-referencing-your-addition" title="Permalink to this headline">¶</a></h3>
+<p>This allows other members of the NiBetaSeries team to confirm that
+you aren’t overlapping with work that’s currently underway and that
+everyone is on the same page with the goal of the work you’re going to
+carry out.</p>
+<p><a class="reference external" href="https://www.igvita.com/2011/12/19/dont-push-your-pull-requests">This blog</a>
+is a nice explanation of why putting this work in up front is so useful
+to everyone involved.</p>
+</div>
+<div class="section" id="fork-the-nibetaseries-repository-to-your-profile">
+<h3>2. <a class="reference external" href="https://help.github.com/articles/fork-a-repo">Fork</a> the <a class="reference external" href="https://github.com/HBClab/NiBetaSeries">NiBetaSeries repository</a> to your profile<a class="headerlink" href="#fork-the-nibetaseries-repository-to-your-profile" title="Permalink to this headline">¶</a></h3>
+<p>This is now your own unique copy of NiBetaSeries. Changes here
+won’t affect anyone else’s work, so it’s a safe space to explore edits
+to the code!</p>
+<p>Make sure to <a class="reference external" href="https://help.github.com/articles/syncing-a-fork">keep your fork up to
+date</a> with the
+master repository, otherwise you can end up with lots of dreaded <a class="reference external" href="https://help.github.com/articles/about-merge-conflicts">merge
+conflicts</a>.</p>
+</div>
+<div class="section" id="clone-your-forked-nibetaseries-to-your-work-machine">
+<h3>3. <a class="reference external" href="https://help.github.com/articles/cloning-a-repository/">Clone your forked</a> NiBetaSeries to your work machine<a class="headerlink" href="#clone-your-forked-nibetaseries-to-your-work-machine" title="Permalink to this headline">¶</a></h3>
+<p>Now that you have your own repository to explore you should clone it to your work machine so you can easily
+edit the files:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># clone the repository</span>
+<span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">YOUR</span><span class="o">-</span><span class="n">USERNAME</span><span class="o">/</span><span class="n">NiBetaSeries</span>
+<span class="c1"># change directories into NiBetaSeries</span>
+<span class="n">cd</span> <span class="n">NiBetaSeries</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="make-the-changes-you-ve-discussed">
+<h3>4. Make the changes you’ve discussed<a class="headerlink" href="#make-the-changes-you-ve-discussed" title="Permalink to this headline">¶</a></h3>
+<p>Try to keep the changes focused. If you submit a large amount of work in
+all in one go it will be much more work for whomever is reviewing your
+pull request. <a class="reference external" href="https://media.giphy.com/media/uRb2p09vY8lEs/giphy.gif">Help them help
+you</a></p>
+<p>This project requires you to “branch out” and make <a class="reference external" href="https://help.github.com/articles/creating-and-deleting-branches-within-your-repository">new
+branch</a>
+and a <a class="reference external" href="https://github.com/HBClab/NiBetaSeries/issues">new issue</a> to
+go with it if the issue doesn’t already exist.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># create the branch on which you will make your issues</span>
+<span class="n">git</span> <span class="n">checkout</span> <span class="o">-</span><span class="n">b</span> <span class="n">your_issue_branch</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="run-the-tests">
+<h3>5. Run the tests<a class="headerlink" href="#run-the-tests" title="Permalink to this headline">¶</a></h3>
+<p>When you’re done making changes, run all the checks, doc builder and spell checker with <a class="reference external" href="http://tox.readthedocs.io/en/latest/install.html">tox</a> one command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tox</span>
+</pre></div>
+</div>
+<p>If the checks fail and you know what went wrong, make the change and run tox again.
+If you are not sure what the error is, go ahead to step 6.</p>
+</div>
+<div class="section" id="add-commit-push-the-changes-to-the-nibetaseries-repository">
+<h3>6. Add/Commit/Push the changes to the NiBetaSeries repository<a class="headerlink" href="#add-commit-push-the-changes-to-the-nibetaseries-repository" title="Permalink to this headline">¶</a></h3>
+<p>Once you’ve made the changes on your branch you are ready to 1) add the files to be tracked by git
+2) commit the files to take a snapshot of the branch, and 3) push the changes to your forked repository.
+You can do complete the add/commit/push process
+following this <a class="reference external" href="https://help.github.com/articles/adding-a-file-to-a-repository-using-the-command-line/">github help page</a>.</p>
+</div>
+<div class="section" id="submit-a-pull-request">
+<h3>7. Submit a <a class="reference external" href="https://help.github.com/articles/creating-a-pull-request">pull request</a><a class="headerlink" href="#submit-a-pull-request" title="Permalink to this headline">¶</a></h3>
+<p>A member of the NiBetaSeries team will review your changes to
+confirm that they can be merged into the main codebase.</p>
+<p>A <a class="reference external" href="https://help.github.com/articles/about-pull-request-reviews">review</a>
+will probably consist of a few questions to help clarify the work you’ve
+done. Keep an eye on your github notifications and be prepared to join
+in that conversation.</p>
+<p>You can update your <a class="reference external" href="https://help.github.com/articles/fork-a-repo">fork</a> of the NiBetaSeries
+<a class="reference external" href="https://github.com/HBClab/NiBetaSeries">repository</a>
+and the pull request will automatically update with those changes. You
+don’t need to submit a new pull request when you make a change in
+response to a review.</p>
+<p>GitHub has a <a class="reference external" href="https://guides.github.com/introduction/flow">nice
+introduction</a> to the
+pull request workflow, but please <a class="reference external" href="#get-in-touch">get in touch</a> if
+you have any questions.</p>
+</div>
+<div class="section" id="nibetaseries-coding-style-guide">
+<h3>NiBetaSeries coding style guide<a class="headerlink" href="#nibetaseries-coding-style-guide" title="Permalink to this headline">¶</a></h3>
+<p>Whenever possible, instances of Nodes and Workflows should use the same names
+as the variables they are assigned to.
+This makes it easier to relate the content of the working directory to the code
+that generated it when debugging.</p>
+<p>Workflow variables should end in <cite>_wf</cite> to indicate that they refer to Workflows
+and not Nodes.
+For instance, a workflow whose basename is <cite>myworkflow</cite> might be defined as
+follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nipype.pipeline</span> <span class="k">import</span> <span class="n">engine</span> <span class="k">as</span> <span class="n">pe</span>
+
+<span class="n">myworkflow_wf</span> <span class="o">=</span> <span class="n">pe</span><span class="o">.</span><span class="n">Workflow</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;myworkflow_wf&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>If a workflow is generated by a function, the name of the function should take
+the form <cite>init_&lt;basename&gt;_wf</cite>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">init_myworkflow_wf</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;myworkflow_wf):</span>
+    <span class="n">workflow</span> <span class="o">=</span> <span class="n">pe</span><span class="o">.</span><span class="n">Workflow</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
+    <span class="o">...</span>
+    <span class="k">return</span> <span class="n">workflow</span>
+
+<span class="n">myworkflow_wf</span> <span class="o">=</span> <span class="n">init_workflow_wf</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;myworkflow_wf&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>If multiple instances of the same workflow might be instantiated in the same
+namespace, the workflow names and variables should include either a numeric
+identifier or a one-word description, such as:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">myworkflow0_wf</span> <span class="o">=</span> <span class="n">init_workflow_wf</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;myworkflow0_wf&#39;</span><span class="p">)</span>
+<span class="n">myworkflow1_wf</span> <span class="o">=</span> <span class="n">init_workflow_wf</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;myworkflow1_wf&#39;</span><span class="p">)</span>
+
+<span class="c1"># or</span>
+
+<span class="n">myworkflow_lh_wf</span> <span class="o">=</span> <span class="n">init_workflow_wf</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;myworkflow_lh_wf&#39;</span><span class="p">)</span>
+<span class="n">myworkflow_rh_wf</span> <span class="o">=</span> <span class="n">init_workflow_wf</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;myworkflow_rh_wf&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="recognizing-contributions">
+<h2>Recognizing contributions<a class="headerlink" href="#recognizing-contributions" title="Permalink to this headline">¶</a></h2>
+<p>BIDS follows the
+<a class="reference external" href="https://github.com/kentcdodds/all-contributors#emoji-key">all-contributors</a>
+specification, so we welcome and recognize all contributions from
+documentation to testing to code development. You can see a list of
+current contributors in the <a class="reference external" href="https://docs.google.com/document/d/1HFUkAEE-pB-angVcYe6pf_-fVf4sCpOHKesUvfb8Grc/edit#heading=h.hds2i7ii7hjo">BIDS
+specification</a>.</p>
+</div>
+<div class="section" id="thank-you">
+<h2>Thank you!<a class="headerlink" href="#thank-you" title="Permalink to this headline">¶</a></h2>
+<p>You’re awesome.</p>
+<p><em>— Based on contributing guidelines from the</em>
+<a class="reference external" href="https://github.com/KirstieJane/STEMMRoleModels">STEMMRoleModels</a>
+<em>project.</em></p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="authors.html" class="btn btn-neutral float-right" title="Authors" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="reference/nibetaseries.html" class="btn btn-neutral" title="nibetaseries" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, James Kent
+      Last updated on Aug 08, 2018.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+        <span class="fa fa-book"> Other Versions</span>
+        v: refactor
+        <span class="fa fa-caret-down"></span>
+    </span>
+    <div class="rst-other-versions">
+        <dl>
+            <dt>Tags</dt>
+            <dd><a href="../v0.0.1/contributing.html">v0.0.1</a></dd>
+            <dd><a href="../v0.2.0/contributing.html">v0.2.0</a></dd>
+            <dd><a href="../v0.2.1/contributing.html">v0.2.1</a></dd>
+            <dd><a href="../v0.2.2/contributing.html">v0.2.2</a></dd>
+        </dl>
+        <dl>
+            <dt>Branches</dt>
+            <dd><a href="../add_graph/contributing.html">add_graph</a></dd>
+            <dd><a href="../master/contributing.html">master</a></dd>
+            <dd><a href="../pass_tests/contributing.html">pass_tests</a></dd>
+            <dd><a href="contributing.html">refactor</a></dd>
+            <dd><a href="../refactor_run/contributing.html">refactor_run</a></dd>
+        </dl>
+    </div>
+</div>
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+
+  
+
+  <script type="text/javascript" src="_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
