@@ -21,8 +21,8 @@ Table of contents
 Been here before? Already know what you're looking for in this guide?
 Jump to the following sections:
 
--  `Joining the BIDS community <#joining-the-bids-community>`__
--  `Check out the BIDS Starter Kit <#check-bids-starter-kit>`__
+-  `Joining the NiBetaSeries developer and user community <#joining-the-nibetaseries-community>`__
+-  `Learn more about BIDS <#learn-more-about-bids>`__
 -  `Get in touch <#get-in-touch>`__
 -  `Contributing through GitHub <#contributing-through-github>`__
 -  `Where to start: wiki, code and
@@ -33,7 +33,7 @@ Jump to the following sections:
 -  `Example pull request <#example-pull-request>`__
 -  `Recognizing contributions <#recognizing-contributions>`__
 
-Joining the BIDS community
+Joining the NiBetaSeries community
 --------------------------
 
 BIDS - the `Brain Imaging Data
@@ -46,12 +46,12 @@ to BIDS and help the broader community.
 We therefore require that all contributions **adhere to our** `Code of
 Conduct <CODE_OF_CONDUCT.md>`__.
 
-How do you know that you're a member of the BIDS community? You're here!
-You know that BIDS exists! You're officially a member of the community.
+How do you know that you're a member of the NiBetaSeries community? You're here!
+You know that NiBetaSeries exists! You're officially a member of the community.
 It's THAT easy! Welcome!
 
-Check out the BIDS Starter Kit
-------------------------------
+Learn more about BIDS
+---------------------
 
 If you're new to BIDS make sure to check out the amazing  `BIDS Starter Kit <https://github.com/INCF/BIDS-Starter-Kit>`_.
 
